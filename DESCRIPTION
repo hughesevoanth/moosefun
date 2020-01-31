@@ -1,0 +1,8 @@
+Package: moosefun
+Version: 0.01
+Date: 2020-01-30
+Title: Functions by Moose
+Description: Random set of useful functions used by Moose and friends
+Author: David A Hughes <hughes.evoanth@gmail.com>
+Maintainer: David A Hughes <hughes.evoanth@gmail.com>
+RoxygenNote: 7.0.2
