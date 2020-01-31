@@ -19,4 +19,5 @@ This repo contains a variety of helpful functions that I come back to time and t
 		
 ### List of functions and their utility
 
-	1. 
+	1. ztransform() a function taken from the GenABEL package to perform z-transformations. This function is necessary to run my edited version of the rank normal transformation function.
+	2. 	rntransform() a function taken from the GenABEL package to perform rank normal transformations. However, it has been edited to randomly split ties values.  
