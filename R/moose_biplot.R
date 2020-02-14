@@ -143,7 +143,7 @@ moose_biplot = function(PCA, dataframe_of_phenotypes, plot_top_N_phenotypes = 3,
 	## plotting colors
 	n = length( unique(wdata$class) )
 	pcol = brewer.pal(n, "Set1")
-	pcol2 = darken(pcol, 0.25)
+	pcol2 = darken(pcol, 0.4)
 	
 	## plotting shapes
 	n = length( unique(wdata$class2) )
@@ -157,7 +157,7 @@ moose_biplot = function(PCA, dataframe_of_phenotypes, plot_top_N_phenotypes = 3,
 	    scale_shape_manual( values = ppch ) +
 	    geom_point( data  = centerpoint, aes( x = PC1, y = PC2  ), 
 	                size = 9, shape = 22, 
-	                fill = pcol2, color = "white", stroke = 2) +
+	                fill = pcol2, color = "black", stroke = 2) +
 	    geom_path(data = eldata, aes(color = class), size = 1.5) +
 	    scale_color_manual( values = pcol ) +
 	    geom_segment(data = new_cormat, 
