@@ -9,75 +9,172 @@
 #' @export
 #' @examples
 #' moose_biplot()
-moose_biplot = function(PCA, dataframe_of_phenotypes, plot_top_N_phenotypes = 3, groupfactor){
-	
-	##############################
-	## build correlation matrix
-	## pf PCs against external variables
-	##############################
-	varexp = summary(PCA)[[6]][2,]
-
-	mydata = data.frame( PC1 = PCA$x[,1], PC2 = PCA$x[,2], class = groupfactor)
-
+moose_biplot = function(PCA, dataframe_of_phenotypes, plot_top_N_phenotypes = 3, 
+                        grouping1 = NA, grouping1NAME = NA,
+                        grouping2 = NA, grouping2NAME = NA, cir.size = 1.75){
+	######################################
+  ## extract needed data from the PCA
+  ######################################
+  if( class(PCA)[1] == "prcomp"){
+    ## variance explain
+    varexp = summary(PCA)[[6]][2,]
+      wdata = data.frame( PC1 = PCA$x[,1], PC2 = PCA$x[,2], class = grouping1, class2 = grouping2)
+	} else {
+	  if( class(PCA) == "pcaRes"  ){
+	    varexp =  summary(PCA)[1,] 
+	    wdata = data.frame( PC1 = PCA@scores[,1], PC2 = PCA@scores[,2], class = grouping1, class2 = grouping2)
+	  }  else {
+	    
+	    stop( "The PCA object you pass to moose_biplot must be from prcomp() or ppca()." ) 
+	      
+	    }
+	}
+  
+  ######################################
+  ##  insure that the PCA eigenvectors
+  ##  are zero centered
+  ##
+  ######################################
+  wdata[, 1:2] = apply(wdata[, 1:2], 2, function(x){  x - mean(x, na.rm = TRUE)  })
+  
+  
+  ######################################
+  ## Build the correlation matrix
+  ## between the PCs and the matrix
+  ## of phenotypes
+  ######################################
+  ## make sure that the sample size of the PCA and the phenotype data set are equal.
+  ## the method does assume that the samples are aligned and ordered. 
+  
+  if( nrow(wdata) != nrow(dataframe_of_phenotypes) ){
+     stop(  "The number of sapmles in your PCA do not match the number of samples in your dataframe_of_phenotypes"  )
+    }
+  
+  ##############################
 	## empty Correlatiom Matrix
-	cormat = matrix(NA, ncol(dataframe_of_phenotypes) , 4, 
-		dimnames = list( colnames(dataframe_of_phenotypes), paste0("PC", 1:4) ) )
-	## estimate spearman
+  ##############################
+  cormat = matrix(NA, ncol(dataframe_of_phenotypes) , 2, 
+		dimnames = list( colnames(dataframe_of_phenotypes), paste0("PC", 1:2) ) )
+	
+  ##############################
+	## estimate Spearman's rho
+  ##############################
 	for(i in 1:ncol(dataframe_of_phenotypes)){
-		for(j in 1:4){
-			est = 	cor.test(dataframe_of_phenotypes[,i], PCA$x[,j], method = "spearman")$estimate
+		for(j in 1:2){
+			est = 	suppressWarnings( cor.test(dataframe_of_phenotypes[,i], wdata[,j], method = "spearman")$estimate )
 			cormat[i,j] = est
 		}
 	}
 
 	##  what are the top correlated phenotypes for PC1 and PC2
-	##  I define this as the sum of the spearm correlations
+	##  (1) defined this as the sum of the spearm correlations
 	rhosum = apply(abs(cormat[, 1:2]), 1, sum)
-	k = order(rhosum, decreasing = TRUE)[1:plot_top_N_phenotypes]
-	cormat = cormat[k, ]
-
-	## redefine the rotation | loadings in the PCA
-	PCA[[2]] = cormat
-
-	## stealing  code from ggbiplot
-	pcobj = PCA
-
-	nobs.factor <- sqrt(nrow(pcobj$x) - 1)
-	d <- pcobj$sdev
-	u <- sweep(pcobj$x, 2, 1/(d * nobs.factor), FUN = "*")
-	v <- pcobj$rotation
-
-	choices = 1:2
-	obs.scale = 0
-	var.scale = 1
-	#circle.prob = 0.69
-	circle.prob = 0.8
-	df.u <- as.data.frame(sweep(u[, choices], 2, d[choices]^obs.scale, FUN = "*"))
-	#v <- sweep(v, 2, d^var.scale, FUN = "*")
-	df.v <- as.data.frame(v[, choices])
-	names(df.u) <- c("xvar", "yvar")
-	names(df.v) <- names(df.u)
-
-	df.u <- df.u * nobs.factor
-
-	r <- sqrt(qchisq(circle.prob, df = 2)) * prod(colMeans(df.u^2))^(1/4)
-	v.scale <- rowSums(v^2)
-	df.v <- r * df.v/sqrt(max(v.scale))
-	df.v$labels = rownames(df.v)   
-
-
-	### GGPLOT 
-	plotout = mydata %>% ggplot( aes(x = PC1, y = PC2, color = class) ) +
-	geom_point(size = 5) + 
-	geom_text(data = df.v, aes(label = labels, 
-		x = xvar, y = yvar), nudge_x = 0.35, 
-	color = "black", size = 5) +
-	geom_segment(data = df.v, aes(x = 0, y = 0, xend = xvar, yend = yvar), 
-		arrow = arrow(length = unit(1/2, "picas")), 
-		size = 1, color = "grey50") +
-	labs(x = paste0("PC1;  variance explained = ", signif(varexp[1], d = 4) ),
-		y = paste0("PC2;  variance explained = ", signif(varexp[2], d = 4) ) )
+	p3 = order(rhosum, decreasing = TRUE)
+  
+	##  (2) ordering PC1 and then PC2; #extract most positive and most negative
+	p1 = order( abs(cormat[,1] ), decreasing  = TRUE)#[ c(1, nrow(cormat) )]
+	p2 = order( abs(cormat[,2] ), decreasing  = TRUE)#[ c(1, nrow(cormat) )]
 	
+	## extracting the variables to plot
+	o = unique( c(p1[1], p2[1], p3[1]) )
+	#o = unique( c( p1, p2, p3 ) )
+	
+	## what loadings|correlations to plot in the loadings plot
+	new_cormat = cormat[o, ]
+  
+	###############################################
+	## scaling the correlations to match the range 
+	##  of data in the PCA plot
+	###############################################
+	pc1_scale = min( abs( range(mydata[,1]) ) ) * 0.95
+	pc2_scale = min( abs( range(mydata[,2]) ) ) * 0.95
+	
+	new_cormat[,1] = new_cormat[,1] * pc1_scale
+	new_cormat[,2] = new_cormat[,2] * pc2_scale
+	new_cormat = as.data.frame(new_cormat)
+	new_cormat$labels = rownames(new_cormat)
+	
+	#############################
+	## Identify the center point
+	## of each Grouping1
+	#############################
+	
+	## unique levels
+	u = sort( as.character( unique(wdata$class) ) )
+	## redefine order of levels
+	wdata$class = factor(wdata$class, levels = u)
+	## estimate center
+	centerpoint = as.data.frame( t( sapply(u, function(x){
+	  w = which(wdata$class == x)
+	  out = apply(wdata[w, 1:2], 2, function(z){ mean(z, na.rm = TRUE)  })
+	  }) ) )
+	
+	
+	#############################
+	##  Estiamte Ellipse
+	##  for each class
+	#############################
+	theta <- c(seq(-pi, pi, length = 50), seq(pi, -pi, length = 50))
+	circle <- cbind(cos(theta), sin(theta))
+	######
+	
+	##
+	edata = lapply(u, function(x){
+	  w = which(wdata$class == x)
+	  sigma = var(wdata[w,1:2])
+	  mu = colMeans(wdata[w, 1:2] )
+	  C = circle %*% chol(sigma) * cir.size
+	  ###
+	  out = t( apply(C, 1, function(x){x + mu}) )
+	  out = data.frame(out, class = x)
+	  return(out)
+	  })
+	###
+	eldata = c()
+	for(i in 1:length(edata)){ eldata = rbind(eldata, edata[[i]])  }
+	
+
+	
+	
+  ####################
+	### GGPLOT 
+	####################
+	
+	## plotting colors
+	n = length( unique(wdata$class) )
+	pcol = brewer.pal(n, "Set1")
+	pcol2 = darken(pcol, 0.25)
+	
+	## plotting shapes
+	n = length( unique(wdata$class2) )
+	ppch = c(21,22,23,24,25)[1:n]
+	
+	## plot
+	plotout = wdata %>% ggplot( aes(x = PC1, y = PC2 ) ) +
+	    #geom_point(size = 5, shape = 21, aes( fill = class ) ) +
+	    geom_point(size = 5,  aes( shape = class2, fill = class ), alpha = 1 ) + 
+	    scale_fill_manual( values = pcol ) +
+	    scale_shape_manual( values = ppch ) +
+	    geom_point( data  = centerpoint, aes( x = PC1, y = PC2  ), 
+	                size = 9, shape = 22, 
+	                fill = pcol2, color = "white", stroke = 2) +
+	    geom_path(data = eldata, aes(color = class), size = 1.5) +
+	    scale_color_manual( values = pcol ) +
+	    geom_segment(data = new_cormat, 
+	                 aes(x = 0, y = 0, xend = PC1, yend = PC2), 
+	                 arrow = arrow(length = unit(1/2, "picas")), 
+	                 size = 1, color = "red") +
+	    geom_text(data = new_cormat, aes(label = labels, x = PC1, y = PC2), 
+	            nudge_x = 0.25, 
+	            color = "black",
+	            size = 5) +
+	    labs(x = paste0("PC1;  variance explained = ", signif(varexp[1], d = 2), "%" ),
+	         y = paste0("PC2;  variance explained = ", signif(varexp[2], d = 2), "%" ),
+	         fill = grouping1NAME,
+	         shape = grouping2NAME) +
+	    guides(color=FALSE)
+	
+	## return the ggplot
 	return(plotout)
 
 
