@@ -67,18 +67,27 @@ moose_biplot = function(PCA, dataframe_of_phenotypes, plot_top_N_phenotypes = 3,
 		}
 	}
 
+  ##############################
+  ## identify and retain
+  ## only those traits
+  ## that you want to plot 
+  ## as arrows
+  ##############################
 	##  what are the top correlated phenotypes for PC1 and PC2
 	##  (1) defined this as the sum of the spearm correlations
 	rhosum = apply(abs(cormat[, 1:2]), 1, sum)
 	p3 = order(rhosum, decreasing = TRUE)
   
 	##  (2) ordering PC1 and then PC2; #extract most positive and most negative
-	p1 = order( abs(cormat[,1] ), decreasing  = TRUE)#[ c(1, nrow(cormat) )]
-	p2 = order( abs(cormat[,2] ), decreasing  = TRUE)#[ c(1, nrow(cormat) )]
+	p1 = order( abs(cormat[,1] ), decreasing  = TRUE)
+	p2 = order( abs(cormat[,2] ), decreasing  = TRUE)
+	#p1 = order( cormat[,1] , decreasing  = TRUE)[ c(1:2, (nrow(cormat)-1):nrow(cormat)   )]
+	#p2 = order( cormat[,2] , decreasing  = TRUE)[ c(1:2, (nrow(cormat)-1):nrow(cormat)   )]
+	
 	
 	## extracting the variables to plot
 	o = unique( c(p1[1], p2[1], p3[1]) )
-	#o = unique( c( p1, p2, p3 ) )
+	#o = unique( c( p1, p2, p3[1:2] ) )
 	
 	## what loadings|correlations to plot in the loadings plot
 	new_cormat = cormat[o, ]
