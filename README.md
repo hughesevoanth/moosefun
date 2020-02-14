@@ -42,10 +42,11 @@ ___
 		> moose_biplot(PCA = pca, dataframe_of_phenotypes = iris[, 1:4], 
              plot_top_N_phenotypes = 3, 
              grouping1 = iris$Species, grouping1NAME = "species",
-             grouping2 = iris$Species, grouping2NAME =  "species" )
+             grouping2 = iris$Species, grouping2NAME =  "species",
+             scalearrows = FALSE )
 
 	- the dataframe_of_phenotypes can be any matrix of quantitative trait with the same number of row as passed to the prcomp() or ppca() functions.
-	- grouping1 dictates the color scheme and the ellipses to be drawn **Currently limited to 9 groups**
-	- grouping2 dictates the plot shapes to be used. **Currently limited to 5 groups**
-	
+	- *grouping1* dictates the color scheme and the ellipses to be drawn **Currently limited to 9 groups**
+	- *grouping2* dictates the plot shapes to be used. **Currently limited to 5 groups**
+	- *scalearrows* allows you to scale the largest correlated trait to a rho of 1, and all other arrows in correspoinding manner. This can be done to aid in visualization. Note:  if *scalearrows* is set to TRUE, the relative length of the arrows remain informative.
 	
