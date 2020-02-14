@@ -11,7 +11,8 @@
 #' moose_biplot()
 moose_biplot = function(PCA, dataframe_of_phenotypes, plot_top_N_phenotypes = 3, 
                         grouping1 = NA, grouping1NAME = NA,
-                        grouping2 = NA, grouping2NAME = NA, cir.size = 1.75){
+                        grouping2 = NA, grouping2NAME = NA, cir.size = 1.75, 
+                        scalearrows = FALSE){
 	######################################
   ## extract needed data from the PCA
   ######################################
@@ -82,12 +83,19 @@ moose_biplot = function(PCA, dataframe_of_phenotypes, plot_top_N_phenotypes = 3,
 	## what loadings|correlations to plot in the loadings plot
 	new_cormat = cormat[o, ]
   
+	
+	## scale the arrow size to make them longer on the plot
+	if(scalearrows == TRUE){
+	  new_cormat = new_cormat / max( abs(new_cormat) )
+	}
+	
+	
 	###############################################
 	## scaling the correlations to match the range 
 	##  of data in the PCA plot
 	###############################################
-	pc1_scale = min( abs( range(mydata[,1]) ) ) * 0.95
-	pc2_scale = min( abs( range(mydata[,2]) ) ) * 0.95
+	pc1_scale = min( abs( range(wdata[,1]) ) ) * 0.95
+	pc2_scale = min( abs( range(wdata[,2]) ) ) * 0.95
 	
 	new_cormat[,1] = new_cormat[,1] * pc1_scale
 	new_cormat[,2] = new_cormat[,2] * pc2_scale
