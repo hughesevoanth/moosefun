@@ -12,3 +12,5 @@ Imports:
 	tidyverse,
 	tibble,
 	RColorBrewer,
+	pcaMethods,
+	Hmisc
