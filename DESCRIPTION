@@ -1,8 +1,14 @@
 Package: moosefun
-Version: 0.01
+Version: 0.0.1
 Date: 2020-01-30
 Title: Functions by Moose
 Description: Random set of useful functions used by Moose and friends
 Author: David A Hughes <hughes.evoanth@gmail.com>
 Maintainer: David A Hughes <hughes.evoanth@gmail.com>
 RoxygenNote: 7.0.2
+Depends: R (>=3.3.0)
+License: CC0
+Imports:
+	tidyverse,
+	tibble,
+	RColorBrewer,
