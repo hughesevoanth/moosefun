@@ -8,7 +8,12 @@ moose_biplot(
   PCA,
   dataframe_of_phenotypes,
   plot_top_N_phenotypes = 3,
-  groupfactor
+  grouping1 = NA,
+  grouping1NAME = NA,
+  grouping2 = NA,
+  grouping2NAME = NA,
+  cir.size = 1.75,
+  scalearrows = FALSE
 )
 }
 \arguments{

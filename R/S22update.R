@@ -1,10 +1,10 @@
 #' Function that adds a variable and calcullates the partial correlation matrix
 #'
 #' This function estimates partial correlation matrix
-#' @param k
-#' @param i
-#' @param S22
-#' @param nvar
+#' @param k i do not know what this is, it comes from the PV()
+#' @param i i do not know what this is, it comes from the PV()
+#' @param S22 S22 to be updated
+#' @param nvar the number fo variables
 #' @keywords PVA
 #' @export
 #' @examples
