@@ -62,5 +62,5 @@ treecut.pvs = function( tree, variabledata , cutheight){
   pvs = pvs[o, ]
   rownames(pvs) = paste0("K", pvs[,1])
   ##
-  return(pvs)
+  return( list( pvs = pvs, k = k ) )
 }
