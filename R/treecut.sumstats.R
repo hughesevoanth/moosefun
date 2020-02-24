@@ -29,7 +29,7 @@ treecut.sumstats = function( tree, cormat, cutheight ){
     warning( paste0("It is advised to use the hclust method complete. You used the method ", tree$method, ".") )
   }
   ############## perform tree cut
-  k = cutree(tree, h = cutheight)
+  k = stats::cutree(tree, h = cutheight)
   ############## unique K clusters with more than one variable in them
   uniqueKs = names( which( table(k) > 1 ) )
   ##############  iterate over these clusters and estimate sumstats

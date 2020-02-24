@@ -30,7 +30,7 @@ treecut.pvs = function( tree, variabledata , cutheight){
   }
   ###############
   ## cut tree
-  k = cutree(tree, h = cutheight)
+  k = stats::cutree(tree, h = cutheight)
   ## vector of unique Ks
   singleKs = as.numeric( names( which( table(k) == 1 ) ) )
   ## vector of unique Ks with n > 1

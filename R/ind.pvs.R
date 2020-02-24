@@ -23,7 +23,7 @@ ind.pvs = function( variabledata, tree, cormat, cutheight){
     n = as.character(PVs[, 3])
     newdistmat = as.dist(as.matrix(tdat$distmat)[n, n])
     tree = hclust(newdistmat,  method = "complete")
-    k = table( cutree(tree, h = cutheight) )
+    k = table( stats::cutree(tree, h = cutheight) )
     ###############
     if( length(n) == length( k ) ){
       nomoreclusters = 1
