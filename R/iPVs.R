@@ -43,6 +43,10 @@ iPVs = function( variabledata, cutheight = 0.5 ){
     groupmembers = groupmembers )
 
   ### data out
-  return(iPV_table)
+  out = list(iPV_table = iPV_table, 
+    PV_cluster_members = PV_cluster_members,
+    PVresults = NewPV$PVresults,
+    workingdata = wdata )
+  return(out)
 
 }
