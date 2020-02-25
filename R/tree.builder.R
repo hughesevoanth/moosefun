@@ -28,7 +28,7 @@ tree.builder = function( wdata ){
     eigenvalues = eigen(cmat, symmetric = TRUE)$values
 
     ## PCA
-    cat("4. estimating principal components\n")
+    cat("5. estimating principal components\n")
     pca = prcomp(cmat, center = TRUE, scale = TRUE)
     
     varexp = t(summary(pca)[[6]][2:3, ])

@@ -9,9 +9,11 @@
 #' iPVs()
 iPVs = function( variabledata, cutheight = 0.5 ){
   ## estiamte correlation matrix, build tree, generate PCA from correlation matrix
+  cat(paste0("(I) tree.builder -- \n"))
   wdata = tree.builder(variabledata)
   
   ## identify the PVs (independent principal variables)
+  cat(paste0("(II) ind.pvs -- identify independent clusters and initial principal variables\n"))
   StudyPVs = ind.pvs( variabledata = wdata$variabledata,
   tree = wdata$tree,
   cormat = wdata$cormat,
@@ -21,14 +23,17 @@ iPVs = function( variabledata, cutheight = 0.5 ){
   initial_ind_PVs = as.character( StudyPVs$PVs$pvs[,"PV"] )
 
   ## identify all variables that belong to a group. i.e. each PV is tagging which other variables? 
+  cat(paste0("(III) Kcluster.groups -- identify all variables|members of a cluster, iteratively.\n"))
   PV_cluster_members = Kcluster.groups( ind_pv_iterations = StudyPVs$treecut_iterations )
   
   ## re-estiamte PV and the VarExp by that top PV for the total variation of group members.
-  NewPV = Kcluster_PVs(variabledata = wdata$variabledata, Kmembers = PV_k_members )
+  cat(paste0("(IV) Kcluster_PVs -- identify the final set of PV for each cluster, and estimate the variance explained.\n"))
+  NewPV = Kcluster_PVs(variabledata = wdata$variabledata, Kmembers = PV_cluster_members )
   final_ind_PVs = as.character(NewPV$PVtable[,1])
   vexp = NewPV$PVtable[,2]
   
   ## place all of the useful data into a table
+  cat(paste0("(V) Generate summary table with PVs, cluster members, and variance explained.\n"))
   clustersize = unlist( lapply(PV_cluster_members, length) )
   groupmembers = unlist( lapply(PV_cluster_members, function(x){ paste(x, collapse = ":") } ) )
   
