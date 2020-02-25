@@ -11,7 +11,7 @@
 #' @examples
 #' ind.pvs()
 ind.pvs = function( variabledata, tree, cormat, distmat, cutheight){
-  Kclusters = list()
+  TC_iteration = list()
   nomoreclusters = 0
   ### while loop
   ### while there are still clusters, at height h, in each newly generated tree using the PVs
@@ -26,8 +26,8 @@ ind.pvs = function( variabledata, tree, cormat, distmat, cutheight){
     PVs = treecut.pvs( tree = tree, variabledata = variabledata, cutheight = cutheight)
     
     ## add the k cluster identifiers to the list object Kclusters
-    title = paste0("Kculster_cut_", i)
-    Kclusters[[title]] = PVs$k
+    title = paste0("treecut.pvs_iteration_", i)
+    TC_iteration[[title]] = PVs
 
     ## vector of Principal variable names
     n = as.character(PVs$pvs[, 3])
@@ -56,6 +56,6 @@ ind.pvs = function( variabledata, tree, cormat, distmat, cutheight){
   n = as.character(PVs$pvs[, 3])
   MaxCor_remaining = max( as.dist( abs( cormat[n,n] ) ) , na.rm = TRUE)
   ###
-  out = list(PVs = PVs, tree = tree, cutheight = cutheight, MaxCor_remaining = MaxCor_remaining, Kclusters = Kclusters)
+  out = list(PVs = PVs, tree = tree, cutheight = cutheight, MaxCor_remaining = MaxCor_remaining, treecut_iterations = TC_iteration)
   return(out)
 }
