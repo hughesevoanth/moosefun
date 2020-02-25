@@ -4,14 +4,16 @@
 \alias{ind.pvs}
 \title{A function to identify and extract the principal variables in your dataset.}
 \usage{
-ind.pvs(variabledata, tree, cormat, cutheight)
+ind.pvs(variabledata, tree, cormat, distmat, cutheight)
 }
 \arguments{
 \item{variabledata}{a data.frame of the variable data used to build your cormat and hclust tree}
 
 \item{tree}{a hclust object of you variables, built with the cormat and the hclust method "complete"}
 
-\item{cormat}{your data.frame of variables used to generate your tree}
+\item{cormat}{your correlation matrix}
+
+\item{distmat}{your distance matrix}
 
 \item{cutheight}{the height at which you wish to cut your tree}
 }
