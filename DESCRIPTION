@@ -9,6 +9,7 @@ RoxygenNote: 7.0.2
 Depends: R (>= 3.3)
 License: CC0
 Imports:
+	biomaRt,
 	tidyverse,
 	tibble,
 	RColorBrewer,
