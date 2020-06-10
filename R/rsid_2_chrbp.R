@@ -25,7 +25,7 @@ rsid_2_chrbp = function(rsid){
       "minor_allele", "minor_allele_freq", 
       "allele_1", "ensembl_gene_stable_id"), 
                  filters = c( 'snp_filter'),
-                 values = rsid,
+                 values = snp,
                  mart = variation)
     return( unlist( o[1,] ) )
     }) )
