@@ -11,6 +11,9 @@ Test_DF_Correlations = function(df){
   diag(rhomat) = diag(pvalmat) = 1
   for(i in 1:ncol(df)){
     for(j in 1:ncol(df)){
+      ###
+      print(c(i,j))
+      ###
       x = unlist(df[,i]);  y = unlist(df[,j])
       if(class(x) == "factor" & class(y) == "factor" ){
         test = factor_on_factor(x,y)
