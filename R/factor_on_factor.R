@@ -9,15 +9,18 @@
 #' factor_on_factor()
 factor_on_factor = function(x,y){
   mytable = table(x,y)
-  chi2test = chisq.test(mytable, correct=F)
-  N = sum(chi2test$observed)
-  chi2 = chi2test$statistic
-  pval = chi2test$p.value
-  ## summary stats
-  k <- min(dim(chi2test$observed))
-  V <- sqrt(chi2/(N * (k - 1)))
-        
-  out = c(V, chi2, pval)
+  chi2test = try( chisq.test(mytable, correct=F) )
+  if(length(chi2test) > 1){
+    N = sum(chi2test$observed)
+    chi2 = chi2test$statistic
+    pval = chi2test$p.value
+    ## summary stats
+    k <- min(dim(chi2test$observed))
+    V <- sqrt(chi2/(N * (k - 1)))   
+    out = c(V, chi2, pval)
+  } else {  
+      out = c(0,0,1)
+  }
   names(out) = c("Crammers_V", "Chi2_stat", "Chi2_pval")
   return(out)
 }
