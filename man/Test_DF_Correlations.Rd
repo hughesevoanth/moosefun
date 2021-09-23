@@ -4,7 +4,7 @@
 \alias{Test_DF_Correlations}
 \title{A Function estimate the correlation among all columns in a data frame, categorical and quantitative}
 \usage{
-Test_DF_Correlations(df)
+Test_DF_Correlations(df, report_progress = FALSE)
 }
 \arguments{
 \item{df}{a data frame of data, can contain both numeric (quantitative) and factor (categorical) data}
