@@ -43,7 +43,7 @@ linear_nonlinear_fits = function(wdata, dependent, independent, covariables = NA
 	### 4. Perform Linear Model 
 	##############################
   	lm_mod = lm(form, data = mod_data)
-  	glm_mod = glm(form, data = mod_data, family = "gaussian")
+  	# glm_mod = glm(form, data = mod_data, family = "gaussian")
   	
   	#################
   	## 4a. summary stats
@@ -70,7 +70,7 @@ linear_nonlinear_fits = function(wdata, dependent, independent, covariables = NA
   	##############################
 	### 6. Perform GAM (non-linear) Model 
 	##############################
-  	gam_mod = gam( form, data = mod_data,  method = "REML")  
+  	gam_mod = mgcv::gam( form, data = mod_data,  method = "REML")  
   	# gam.check(gam_mod)
 
   	#################
