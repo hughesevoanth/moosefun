@@ -9,7 +9,9 @@ linear_nonlinear_fits(
   dependent,
   independent,
   covariables = NA,
-  rnt_dependent = TRUE
+  rnt_dependent = TRUE,
+  bam = FALSE,
+  nthread_count = 1
 )
 }
 \arguments{
@@ -22,6 +24,10 @@ linear_nonlinear_fits(
 \item{covariables}{a string or character vector that matches column names in wdata that you would like to define as additional covariate in your model. Set as NA, if you have no covariates and thus would like to run a univariate analysis.}
 
 \item{rnt_dependent}{TRUE or FALSE, would you like to rank normal transform your dependent variable prior to fitting the data? Default value is TRUE. Uses the rntransform() function in this package to rank normal transform.}
+
+\item{bam}{if you would like to run the GAM with bam(), for very large data sets, then set bam = TRUE. Default is bam = FALSE and gam() is used.}
+
+\item{nthread_count}{number of compute threads to use in your bam().}
 }
 \description{
 This function estimates the best K (number of clusters) for your data set using Kmeans and a Silhouette Analysis
