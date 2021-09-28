@@ -1,6 +1,6 @@
 #' A function to fit a linear and non-linear GAM model to one's data and return some useful summary statistics
 #'
-#' This function estimates the best K (number of clusters) for your data set using Kmeans and a Silhouette Analysis
+#' This function fits a GAM glm in a linear and non-linear framework and tests if the glm GAM with a smooth independent is a better fit to the data.
 #' @param wdata a data frame of data with appropriate column names
 #' @param dependent a string that matches a column name in wdata that you would like to define as the dependent or response variable in your analysis
 #' @param independent a string that matches a column name in wdata that you would like to define as the independent or primary explanatory variable of interest in your analysis

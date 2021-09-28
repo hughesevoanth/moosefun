@@ -30,7 +30,7 @@ linear_nonlinear_fits(
 \item{nthread_count}{number of compute threads to use in your bam().}
 }
 \description{
-This function estimates the best K (number of clusters) for your data set using Kmeans and a Silhouette Analysis
+This function fits a GAM glm in a linear and non-linear framework and tests if the glm GAM with a smooth independent is a better fit to the data.
 }
 \examples{
 linear_nonlinear_fits()
