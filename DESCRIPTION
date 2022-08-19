@@ -5,10 +5,10 @@ Title: Functions by Moose
 Description: Random set of useful functions used by Moose and friends
 Author: David A Hughes <hughes.evoanth@gmail.com>
 Maintainer: David A Hughes <hughes.evoanth@gmail.com>
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.2
 Depends: R (>= 3.3)
 License: CC0
-Imports:
+Suggests:
 	biomaRt,
 	tidyverse,
 	tibble,
